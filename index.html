@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Objections to Mormonism — A Research Dossier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #131209;
+    --bg-alt: #1a1811;
+    --paper: #ece4cd;
+    --paper-dim: #e1d7bb;
+    --paper-line: #cabb92;
+    --ink: #221f16;
+    --ink-soft: #55503e;
+    --stamp: #8a2020;
+    --stamp-soft: #8a202022;
+    --green: #2f4a35;
+    --muted: #a89f80;
+    --rule-dark: #3a3626;
+    --max: 860px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--paper);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, #221f14 0%, transparent 60%),
+      radial-gradient(ellipse 900px 600px at 100% 20%, #1c1a12 0%, transparent 55%);
+  }
+
+  /* subtle grain */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:999;
+    opacity:0.05;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  a{color:inherit;}
+  ::selection{background:var(--stamp); color:var(--paper);}
+
+  h1,h2,h3{font-family:'Fraunces', serif; margin:0; letter-spacing:-0.01em;}
+
+  .label{
+    font-family:'IBM Plex Mono', monospace;
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    font-size:0.72rem;
+  }
+
+  /* ---------- Sticky nav ---------- */
+  .quicknav{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; gap:0;
+    background:rgba(19,18,9,0.86);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--rule-dark);
+    padding:0 clamp(20px,5vw,48px);
+  }
+  .quicknav-inner{
+    max-width:var(--max);
+    margin:0 auto;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 0;
+  }
+  .quicknav-brand{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    color:var(--muted);
+    text-transform:uppercase;
+  }
+  .quicknav-links{
+    display:flex; gap:4px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.74rem;
+  }
+  .quicknav-links a{
+    text-decoration:none;
+    color:var(--muted);
+    padding:6px 11px;
+    border:1px solid transparent;
+    border-radius:2px;
+    transition:color .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .quicknav-links a:hover,
+  .quicknav-links a:focus-visible{
+    color:var(--paper);
+    border-color:var(--rule-dark);
+    outline:none;
+  }
+  .quicknav-links a.active{
+    color:var(--stamp);
+    background:#8a20201a;
+    border-color:#8a202044;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    max-width:var(--max);
+    margin:0 auto;
+    padding:clamp(56px,9vw,104px) clamp(20px,5vw,48px) clamp(40px,6vw,64px);
+    position:relative;
+  }
+  .hero-filehead{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--muted);
+    letter-spacing:0.08em;
+    border-bottom:1px dashed var(--rule-dark);
+    padding-bottom:14px;
+    margin-bottom:34px;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .hero-eyebrow{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.74rem;
+    letter-spacing:0.16em;
+    color:var(--stamp);
+    text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(2.5rem, 6.4vw, 4.4rem);
+    font-weight:600;
+    line-height:1.02;
+    color:var(--paper);
+    max-width:14ch;
+  }
+  .hero-sub{
+    margin-top:22px;
+    max-width:56ch;
+    font-size:1.08rem;
+    line-height:1.6;
+    color:#cfc6a9;
+    font-weight:400;
+  }
+  .hero-stats{
+    margin-top:44px;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    border-top:1px solid var(--rule-dark);
+  }
+  .hero-stat{
+    padding:16px 14px 0 0;
+    border-right:1px solid var(--rule-dark);
+  }
+  .hero-stat:last-child{border-right:none;}
+  .hero-stat a{
+    text-decoration:none;
+    display:block;
+  }
+  .hero-stat-num{
+    font-family:'Fraunces', serif;
+    font-size:2rem;
+    font-weight:600;
+    color:var(--paper);
+  }
+  .hero-stat-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.68rem;
+    letter-spacing:0.06em;
+    color:var(--muted);
+    margin-top:2px;
+    line-height:1.35;
+  }
+  .hero-stat a:hover .hero-stat-num,
+  .hero-stat a:focus-visible .hero-stat-num{color:var(--stamp);}
+
+  .stampmark{
+    position:absolute;
+    top:clamp(30px,7vw,58px);
+    right:clamp(10px,4vw,30px);
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:0.78rem;
+    letter-spacing:0.14em;
+    color:var(--stamp);
+    border:2.5px solid var(--stamp);
+    padding:9px 14px;
+    border-radius:3px;
+    transform:rotate(6deg);
+    opacity:0.9;
+    mix-blend-mode:screen;
+    user-select:none;
+  }
+
+  /* ---------- Exhibit sections ---------- */
+  main{max-width:var(--max); margin:0 auto; padding:0 clamp(20px,5vw,48px) 40px;}
+
+  .exhibit{
+    position:relative;
+    margin-top:64px;
+    scroll-margin-top:64px;
+  }
+
+  .folder-tab{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--paper-dim);
+    color:var(--ink);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    font-weight:600;
+    padding:8px 18px 10px;
+    clip-path:polygon(6% 0, 94% 0, 100% 100%, 0 100%);
+    margin-left:28px;
+    margin-bottom:-1px;
+  }
+  .folder-tab .tab-dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--stamp);
+    display:inline-block;
+  }
+
+  .panel{
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:2px;
+    padding:clamp(24px,4vw,44px) clamp(20px,4.5vw,44px) clamp(28px,4vw,40px);
+    box-shadow:0 24px 50px -20px rgba(0,0,0,0.55), 0 2px 0 var(--paper-line) inset;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .panel::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; top:0;
+    height:4px;
+    background:repeating-linear-gradient(90deg, var(--ink) 0 4px, transparent 4px 11px);
+    opacity:0.12;
+  }
+
+  .exhibit-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:24px;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:18px;
+    margin-bottom:8px;
+  }
+  .exhibit-head-text .exhibit-kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+  }
+  .exhibit-head-text h2{
+    margin-top:6px;
+    font-size:clamp(1.5rem, 3.2vw, 2.1rem);
+    font-weight:600;
+    line-height:1.08;
+  }
+  .exhibit-intro{
+    margin-top:14px;
+    font-size:0.98rem;
+    line-height:1.65;
+    color:var(--ink-soft);
+    max-width:60ch;
+  }
+
+  .doc-stamp{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:700;
+    font-size:0.85rem;
+    letter-spacing:0.12em;
+    color:var(--stamp);
+    border:3px solid var(--stamp);
+    padding:8px 12px;
+    border-radius:4px;
+    transform:rotate(-5deg);
+    white-space:nowrap;
+    flex-shrink:0;
+    margin-top:4px;
+  }
+
+  .entries{
+    list-style:none;
+    margin:26px 0 0;
+    padding:0;
+  }
+  .entry{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:18px;
+    padding:22px 0;
+    border-bottom:1px solid var(--paper-line);
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity .55s ease, transform .55s ease;
+  }
+  .entry.is-visible{opacity:1; transform:translateY(0);}
+  .entry:last-child{border-bottom:none; padding-bottom:6px;}
+
+  .entry-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:0.85rem;
+    color:var(--stamp);
+    letter-spacing:0.02em;
+    padding-top:2px;
+  }
+  .entry-body h3{
+    font-size:1.12rem;
+    font-weight:600;
+    line-height:1.3;
+    color:var(--ink);
+  }
+  .entry-body p{
+    margin:8px 0 0;
+    font-size:0.98rem;
+    line-height:1.62;
+    color:var(--ink-soft);
+    max-width:64ch;
+  }
+
+  /* ---------- Divider / connective tissue ---------- */
+  .field-note{
+    max-width:var(--max);
+    margin:52px auto 0;
+    padding:0 clamp(20px,5vw,48px);
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+    color:var(--muted);
+    font-size:0.92rem;
+    line-height:1.6;
+  }
+  .field-note .mark{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--stamp);
+    font-size:0.8rem;
+    margin-top:2px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    max-width:var(--max);
+    margin:88px auto 0;
+    padding:32px clamp(20px,5vw,48px) 60px;
+    border-top:1px solid var(--rule-dark);
+  }
+  footer p{
+    font-size:0.86rem;
+    line-height:1.7;
+    color:var(--muted);
+    max-width:64ch;
+  }
+  footer .foot-mono{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.08em;
+    color:#5f5a44;
+    margin-top:18px;
+    text-transform:uppercase;
+  }
+
+  @media (max-width: 640px){
+    .hero-stats{grid-template-columns:repeat(2,1fr);}
+    .hero-stat:nth-child(2){border-right:none;}
+    .hero-stat{border-bottom:1px solid var(--rule-dark); padding-bottom:14px;}
+    .quicknav-links a{padding:6px 8px;}
+    .exhibit-head{flex-direction:column;}
+    .doc-stamp{align-self:flex-start;}
+    .entry{grid-template-columns:40px 1fr;}
+    .stampmark{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="quicknav" aria-label="Exhibit navigation">
+  <div class="quicknav-inner">
+    <span class="quicknav-brand">Dossier · Case No. 1830</span>
+    <div class="quicknav-links">
+      <a href="#exhibit-a" data-nav>A — Origins</a>
+      <a href="#exhibit-b" data-nav>B — Institution</a>
+      <a href="#exhibit-c" data-nav>C — Impact</a>
+      <a href="#exhibit-d" data-nav>D — Finance</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="stampmark">RESEARCH<br>COPY</div>
+
+  <div class="hero-filehead">
+    <span>Filed under: Faith Transition Resources</span>
+    <span>4 Exhibits · 14 Entries</span>
+  </div>
+
+  <span class="hero-eyebrow">Compiled Objections Dossier</span>
+  <h1>Modern Objections<br>to Mormonism</h1>
+  <p class="hero-sub">
+    A working file of the historical, doctrinal, social, and financial arguments most often
+    raised against the Church of Jesus Christ of Latter-day Saints — organized the way a
+    researcher would file them: by claim, by evidence, by category.
+  </p>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <a href="#exhibit-a" data-nav-stat>
+        <div class="hero-stat-num">06</div>
+        <div class="hero-stat-label">Exhibit A<br>Historical Truth Claims</div>
+      </a>
+    </div>
+    <div class="hero-stat">
+      <a href="#exhibit-b" data-nav-stat>
+        <div class="hero-stat-num">03</div>
+        <div class="hero-stat-label">Exhibit B<br>Institutional Doctrine</div>
+      </a>
+    </div>
+    <div class="hero-stat">
+      <a href="#exhibit-c" data-nav-stat>
+        <div class="hero-stat-num">03</div>
+        <div class="hero-stat-label">Exhibit C<br>Psychological Impact</div>
+      </a>
+    </div>
+    <div class="hero-stat">
+      <a href="#exhibit-d" data-nav-stat>
+        <div class="hero-stat-num">02</div>
+        <div class="hero-stat-label">Exhibit D<br>Financial Transparency</div>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- EXHIBIT A -->
+  <section class="exhibit" id="exhibit-a">
+    <div class="folder-tab"><span class="tab-dot"></span> EXHIBIT A</div>
+    <div class="panel">
+      <div class="exhibit-head">
+        <div class="exhibit-head-text">
+          <span class="exhibit-kicker">01 / Foundational Claims</span>
+          <h2>Foundational and Historical Truth Claims</h2>
+          <p class="exhibit-intro">Where the church's own founding narrative meets archaeology, genetics,
+            and the historical record — and where critics say the two stop lining up.</p>
+        </div>
+        <span class="doc-stamp">UNVERIFIED</span>
+      </div>
+
+      <ol class="entries">
+        <li class="entry">
+          <span class="entry-num">A–1</span>
+          <div class="entry-body">
+            <h3>Book of Mormon Anachronisms</h3>
+            <p>Archaeological, linguistic, and biological inconsistencies — including references to steel,
+              horses, and wheeled chariots in a pre-Columbian American setting where no supporting evidence
+              for any of them has been found.</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-num">A–2</span>
+          <div class="entry-body">
+            <h3>DNA Evidence</h3>
+            <p>Genetic studies on Native American populations contradict the narrative that indigenous
+              Americans are primarily descendants of ancient Israelites, showing East Asian and Siberian
+              genetic markers instead.</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-num">A–3</span>
+          <div class="entry-body">
+            <h3>Nineteenth-Century Milieu</h3>
+            <p>Historians argue the text reflects 19th-century frontier themes — such as the Mound
+              Builder myth and anti-Masonry — rather than an ancient record.</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-num">A–4</span>
+          <div class="entry-body">
+            <h3>Translation Method</h3>
+            <p>Historical records and church essays confirm Joseph Smith translated using a seer stone
+              in a hat rather than physical observation of the plates using the Urim and Thummim.</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-num">A–5</span>
+          <div class="entry-body">
+            <h3>The Book of Abraham</h3>
+            <p>Papyri claimed to be translated by Smith into the Book of Abraham were later identified
+              by Egyptologists as standard Egyptian funerary texts — the Book of Breathings.</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-num">A–6</span>
+          <div class="entry-body">
+            <h3>Shifting First Vision Accounts</h3>
+            <p>The earliest written account of the First Vision (1835) does not feature both God the
+              Father and Jesus Christ, pointing to evolving theology over time.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="field-note">
+    <span class="mark">→</span>
+    <p>Objections in Exhibit A concern origins. Exhibit B moves from text to institution — how the
+      church's policies have shifted, and who those shifts affected.</p>
+  </div>
+
+  <!-- EXHIBIT B -->
+  <section class="exhibit" id="exhibit-b">
+    <div class="folder-tab"><span class="tab-dot"></span> EXHIBIT B</div>
+    <div class="panel">
+      <div class="exhibit-head">
+        <div class="exhibit-head-text">
+          <span class="exhibit-kicker">02 / Institutional Record</span>
+          <h2>Institutional Evolution and Doctrines of Exclusion</h2>
+          <p class="exhibit-intro">Policies the church has since reversed, revised, or continues to
+            defend — and the people they were built around excluding.</p>
+        </div>
+        <span class="doc-stamp">DOCUMENTED</span>
+      </div>
+
+      <ol class="entries">
+        <li class="entry">
+          <span class="entry-num">B–1</span>
+          <div class="entry-body">
+            <h3>Priesthood and Temple Ban</h3>
+            <p>Black men were barred from holding the priesthood, and members were barred from temple
+              ordinances, until 1978 — with past justifications later labeled as folklore.</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-num">B–2</span>
+          <div class="entry-body">
+            <h3>Polygamy and Polyandry</h3>
+            <p>Historical records reveal polyandry (marrying women already married to other living
+              men), the marriage of teenage girls, and past public denials of the practice.</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-num">B–3</span>
+          <div class="entry-body">
+            <h3>Gender Hierarchies</h3>
+            <p>Administrative and spiritual authority remains strictly reserved for men, creating a
+              complementarian structure that critics view as patriarchal.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="field-note">
+    <span class="mark">→</span>
+    <p>Institutional policy shapes lived experience. Exhibit C follows the trail from doctrine to
+      the psychological toll critics attribute to it.</p>
+  </div>
+
+  <!-- EXHIBIT C -->
+  <section class="exhibit" id="exhibit-c">
+    <div class="folder-tab"><span class="tab-dot"></span> EXHIBIT C</div>
+    <div class="panel">
+      <div class="exhibit-head">
+        <div class="exhibit-head-text">
+          <span class="exhibit-kicker">03 / Lived Experience</span>
+          <h2>Psychological and Social Impact</h2>
+          <p class="exhibit-intro">How belief structures are said to shape doubt, identity, and
+            family life for members and former members alike.</p>
+        </div>
+        <span class="doc-stamp">UNRESOLVED</span>
+      </div>
+
+      <ol class="entries">
+        <li class="entry">
+          <span class="entry-num">C–1</span>
+          <div class="entry-body">
+            <h3>Epistemological Confinement</h3>
+            <p>Relying primarily on spiritual confirmation creates circular logic, where doubts or
+              historical anomalies are attributed to personal spiritual failure.</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-num">C–2</span>
+          <div class="entry-body">
+            <h3>LGBTQ+ Policies</h3>
+            <p>Strict stances on gender and marriage have caused severe friction, family division,
+              and psychological trauma among queer individuals.</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-num">C–3</span>
+          <div class="entry-body">
+            <h3>High-Demand Control (BITE Model)</h3>
+            <p>Critics apply control models to aspects like temple garments, mandatory tithing,
+              discouragement of critical sources, and strict lifestyle rules.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="field-note">
+    <span class="mark">→</span>
+    <p>The final exhibit turns from belief and behavior to balance sheets.</p>
+  </div>
+
+  <!-- EXHIBIT D -->
+  <section class="exhibit" id="exhibit-d">
+    <div class="folder-tab"><span class="tab-dot"></span> EXHIBIT D</div>
+    <div class="panel">
+      <div class="exhibit-head">
+        <div class="exhibit-head-text">
+          <span class="exhibit-kicker">04 / The Ledger</span>
+          <h2>Financial Transparency and Corporate Structure</h2>
+          <p class="exhibit-intro">What's known — and what isn't — about how the church manages
+            money given by its members.</p>
+        </div>
+        <span class="doc-stamp">UNDISCLOSED</span>
+      </div>
+
+      <ol class="entries">
+        <li class="entry">
+          <span class="entry-num">D–1</span>
+          <div class="entry-body">
+            <h3>Massive Wealth Accumulation</h3>
+            <p>Whistleblower reports highlighted an investment fund exceeding $100 billion, leading
+              to criticism over the balance between wealth hoarding and humanitarian aid.</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="entry-num">D–2</span>
+          <div class="entry-body">
+            <h3>Lack of Transparency</h3>
+            <p>A centralized hierarchy contrasts with local volunteer labor, with little transparency
+              regarding tithing funds and internal institutional handling of issues.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>This dossier collects objections as they are commonly raised by historians, former members,
+    and researchers — it is a summary of arguments, not a verdict on them. Each entry compresses a
+    larger body of source material, correspondence, and church-published essays worth reading in
+    full before drawing conclusions.</p>
+  <p class="foot-mono">End of file · 4 exhibits · 14 entries logged</p>
+</footer>
+
+<script>
+  // Reveal entries on scroll
+  const entries = document.querySelectorAll('.entry');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (reduceMotion) {
+    entries.forEach(el => el.classList.add('is-visible'));
+  } else if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((items) => {
+      items.forEach(item => {
+        if (item.isIntersecting) {
+          item.target.classList.add('is-visible');
+          io.unobserve(item.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    entries.forEach(el => io.observe(el));
+  } else {
+    entries.forEach(el => el.classList.add('is-visible'));
+  }
+
+  // Active nav highlight
+  const navLinks = document.querySelectorAll('.quicknav-links a[data-nav]');
+  const sections = document.querySelectorAll('.exhibit');
+  if ('IntersectionObserver' in window && sections.length) {
+    const navIO = new IntersectionObserver((items) => {
+      items.forEach(item => {
+        const id = item.target.getAttribute('id');
+        const link = document.querySelector(`.quicknav-links a[href="#${id}"]`);
+        if (item.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+    sections.forEach(s => navIO.observe(s));
+  }
+</script>
+
+</body>
+</html>
