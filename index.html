@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Modern Objections to Mormonism — A Research Dossier</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -202,8 +203,15 @@
   }
 
   @media (max-width: 640px){
-    .audio-widget{ right:16px; bottom:16px; }
+    .audio-widget{
+      right:16px;
+      bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+    }
     .audio-caption{ display:none; }
+    .audio-toggle{
+      padding:13px 18px 13px 15px;
+      min-height:44px;
+    }
   }
 
   /* ---------- Scroll progress rail ---------- */
@@ -675,8 +683,8 @@
 </video>
 <div class="bg-overlay" aria-hidden="true"></div>
 
-<audio id="bgAudio" loop preload="auto">
-  <source src="creepers.mp3" type="audio/mp4">
+<audio id="bgAudio" loop preload="auto" playsinline webkit-playsinline x-webkit-airplay="allow">
+  <source src="creepers.mp3" type="audio/mpeg">
 </audio>
 
 <div class="progress-rail" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
@@ -987,7 +995,7 @@
   }
 
   if (bgAudio && audioBtn) {
-    bgAudio.volume = 0.85;
+    try { bgAudio.volume = 0.85; } catch (err) { /* iOS ignores this — harmless */ }
     bgAudio.addEventListener('play', () => setAudioBtnState(true));
     bgAudio.addEventListener('pause', () => setAudioBtnState(false));
     bgAudio.addEventListener('error', () => {
@@ -1001,24 +1009,37 @@
     audioBtn.addEventListener('click', () => {
       if (bgAudio.paused) bgAudio.play().catch(() => {});
       else bgAudio.pause();
-    });
+    }, { passive:true });
 
-    // Try to autoplay on load. Most browsers block audible autoplay without
-    // prior user interaction — if that happens, quietly arm the very next
-    // click/keypress anywhere on the page (other than the button itself,
-    // which already handles its own click) to start playback instead.
+    // Try to autoplay on load. Nearly every mobile browser (iOS Safari,
+    // Chrome/Android) blocks audible autoplay until the visitor has made a
+    // real "activation" gesture on the page — and critically, iOS only
+    // counts click / touchend / keydown for this, NOT pointerdown or
+    // touchstart. So the retry below listens on the gesture types that
+    // actually count, keeps retrying on every one of them (rather than
+    // giving up after a single attempt), and stops only once playback has
+    // genuinely started.
+    const gestureEvents = ['touchend', 'click', 'keydown'];
+    function isAudioButtonEvent(e){
+      return !!(e.target && e.target.closest && e.target.closest('#audioToggle'));
+    }
+    function armAutoStart(){
+      function attemptStart(e){
+        if (isAudioButtonEvent(e)) return;      // the button already handles taps on itself
+        if (!bgAudio.paused) { detach(); return; } // already playing — nothing to do
+        bgAudio.play().then(detach).catch(() => { /* still blocked, try again next gesture */ });
+      }
+      function detach(){
+        gestureEvents.forEach(evt => document.removeEventListener(evt, attemptStart));
+      }
+      gestureEvents.forEach(evt => document.addEventListener(evt, attemptStart, { passive:true }));
+    }
+
     const startPromise = bgAudio.play();
     if (startPromise !== undefined) {
       startPromise.catch(() => {
         setAudioBtnState(false);
-        const resume = (e) => {
-          if (e.target && e.target.closest && e.target.closest('#audioToggle')) return;
-          bgAudio.play().catch(() => {});
-          window.removeEventListener('pointerdown', resume);
-          window.removeEventListener('keydown', resume);
-        };
-        window.addEventListener('pointerdown', resume, { once:true });
-        window.addEventListener('keydown', resume, { once:true });
+        armAutoStart();
       });
     }
   }
