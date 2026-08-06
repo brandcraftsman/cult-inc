@@ -65,6 +65,38 @@
     font-size:0.72rem;
   }
 
+  /* ---------- Cursor dollar trail ---------- */
+  .cursor-trail-layer{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .trail-dollar{
+    position:absolute;
+    top:0; left:0;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:700;
+    line-height:1;
+    transform:translate(-50%,-50%) rotate(var(--rot,0deg));
+    animation:trailFloat 950ms cubic-bezier(.16,.9,.3,1) forwards;
+    user-select:none;
+    text-shadow:0 1px 2px rgba(0,0,0,0.35);
+  }
+  @keyframes trailFloat{
+    0%{
+      opacity:0.95;
+      transform:translate(-50%,-50%) translateY(0) scale(1) rotate(var(--rot,0deg));
+      filter:blur(0px);
+    }
+    100%{
+      opacity:0;
+      transform:translate(-50%,-50%) translateY(-54px) translateX(var(--drift,0px)) scale(0.55) rotate(var(--rot,0deg));
+      filter:blur(0.5px);
+    }
+  }
+
   /* ---------- Scroll progress rail ---------- */
   .progress-rail{
     position:fixed; top:0; left:0; right:0;
@@ -530,6 +562,7 @@
 <body>
 
 <div class="progress-rail" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+<div class="cursor-trail-layer" id="cursorTrail" aria-hidden="true"></div>
 
 <nav class="quicknav" aria-label="Exhibit navigation">
   <div class="quicknav-inner">
@@ -810,6 +843,43 @@
 
 <script>
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Cursor dollar trail ---------- */
+  const trailLayer = document.getElementById('cursorTrail');
+  const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+  if (trailLayer && hasFinePointer && !reduceMotion) {
+    const trailColors = ['#8a2020', '#3f6b46', '#c9a227', '#cfc6a9'];
+    let lastSpawn = 0;
+    const spawnGapMs = 45;
+
+    function spawnDollar(x, y){
+      const el = document.createElement('span');
+      el.className = 'trail-dollar';
+      el.textContent = '$';
+      const size = 12 + Math.random() * 12;
+      const rot = (Math.random() * 50) - 25;
+      const drift = (Math.random() * 40) - 20;
+      const color = trailColors[Math.floor(Math.random() * trailColors.length)];
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.fontSize = size.toFixed(1) + 'px';
+      el.style.color = color;
+      el.style.setProperty('--rot', rot.toFixed(1) + 'deg');
+      el.style.setProperty('--drift', drift.toFixed(1) + 'px');
+      trailLayer.appendChild(el);
+      el.addEventListener('animationend', () => el.remove(), { once:true });
+      setTimeout(() => el.remove(), 1200); // safety cleanup
+    }
+
+    window.addEventListener('pointermove', (e) => {
+      const now = performance.now();
+      if (now - lastSpawn < spawnGapMs) return;
+      lastSpawn = now;
+      const jitterX = (Math.random() * 10) - 5;
+      const jitterY = (Math.random() * 10) - 5;
+      spawnDollar(e.clientX + jitterX, e.clientY + jitterY);
+    }, { passive:true });
+  }
 
   /* ---------- Scroll progress bar ---------- */
   const progressFill = document.getElementById('progressFill');
