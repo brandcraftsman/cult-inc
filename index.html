@@ -203,15 +203,10 @@
   }
 
   @media (max-width: 640px){
-    .audio-widget{
-      right:16px;
-      bottom:calc(16px + env(safe-area-inset-bottom, 0px));
-    }
-    .audio-caption{ display:none; }
-    .audio-toggle{
-      padding:13px 18px 13px 15px;
-      min-height:44px;
-    }
+    .audio-widget{ display:none; }
+  }
+  @media (pointer: coarse){
+    .audio-widget{ display:none; }
   }
 
   /* ---------- Scroll progress rail ---------- */
@@ -981,10 +976,12 @@
 <script>
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- Background audio ---------- */
+  /* ---------- Background audio (desktop only) ---------- */
   const bgAudio = document.getElementById('bgAudio');
   const audioBtn = document.getElementById('audioToggle');
   const audioLabelText = audioBtn ? audioBtn.querySelector('.audio-btn-text') : null;
+  const isMobile = window.matchMedia('(max-width: 640px)').matches ||
+                    window.matchMedia('(pointer: coarse)').matches;
 
   function setAudioBtnState(playing){
     if (!audioBtn) return;
@@ -994,7 +991,14 @@
     if (audioLabelText) audioLabelText.textContent = playing ? 'Pause' : 'Play';
   }
 
-  if (bgAudio && audioBtn) {
+  if (bgAudio && isMobile) {
+    // Player is hidden on mobile/touch — drop the element entirely so the
+    // audio file never even downloads on mobile data.
+    bgAudio.pause();
+    bgAudio.removeAttribute('src');
+    bgAudio.load();
+    bgAudio.remove();
+  } else if (bgAudio && audioBtn) {
     try { bgAudio.volume = 0.85; } catch (err) { /* iOS ignores this — harmless */ }
     bgAudio.addEventListener('play', () => setAudioBtnState(true));
     bgAudio.addEventListener('pause', () => setAudioBtnState(false));
