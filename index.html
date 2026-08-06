@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +29,7 @@
   html{scroll-behavior:smooth;}
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
-    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
   }
 
   body{
@@ -42,7 +43,6 @@
       radial-gradient(ellipse 900px 600px at 100% 20%, #1c1a12 0%, transparent 55%);
   }
 
-  /* subtle grain */
   body::before{
     content:"";
     position:fixed; inset:0;
@@ -65,9 +65,25 @@
     font-size:0.72rem;
   }
 
+  /* ---------- Scroll progress rail ---------- */
+  .progress-rail{
+    position:fixed; top:0; left:0; right:0;
+    height:3px; z-index:100;
+    background:var(--rule-dark);
+  }
+  .progress-fill{
+    height:100%;
+    width:100%;
+    transform-origin:left center;
+    transform:scaleX(0);
+    background:linear-gradient(90deg, var(--stamp), #c0453f);
+    box-shadow:0 0 10px 0 rgba(138,32,32,0.7);
+    will-change:transform;
+  }
+
   /* ---------- Sticky nav ---------- */
   .quicknav{
-    position:sticky; top:0; z-index:50;
+    position:sticky; top:3px; z-index:50;
     display:flex; align-items:center; gap:0;
     background:rgba(19,18,9,0.86);
     backdrop-filter:blur(6px);
@@ -101,13 +117,15 @@
     padding:6px 11px;
     border:1px solid transparent;
     border-radius:2px;
-    transition:color .15s ease, border-color .15s ease, background .15s ease;
+    transition:color .15s ease, border-color .15s ease, background .15s ease, transform .15s ease;
+    display:inline-block;
   }
   .quicknav-links a:hover,
   .quicknav-links a:focus-visible{
     color:var(--paper);
     border-color:var(--rule-dark);
     outline:none;
+    transform:translateY(-1px);
   }
   .quicknav-links a.active{
     color:var(--stamp);
@@ -121,7 +139,46 @@
     margin:0 auto;
     padding:clamp(56px,9vw,104px) clamp(20px,5vw,48px) clamp(40px,6vw,64px);
     position:relative;
+    overflow:hidden;
   }
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes stampSlam{
+    0%{opacity:0; transform:scale(2.6) rotate(-24deg);}
+    50%{opacity:1; transform:scale(0.82) rotate(10deg);}
+    72%{transform:scale(1.08) rotate(3deg);}
+    100%{opacity:0.9; transform:scale(1) rotate(6deg);}
+  }
+  @keyframes docStampSlam{
+    0%{opacity:0; transform:scale(2.4) rotate(14deg);}
+    50%{opacity:1; transform:scale(0.85) rotate(-9deg);}
+    72%{transform:scale(1.07) rotate(-3deg);}
+    100%{opacity:1; transform:scale(1) rotate(-5deg);}
+  }
+  @keyframes stampGlow{
+    from{box-shadow:0 0 0 rgba(138,32,32,0);}
+    to{box-shadow:0 0 16px rgba(138,32,32,0.35);}
+  }
+  @keyframes tabDrop{
+    from{opacity:0; transform:translateY(-160%);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes panelRise{
+    from{opacity:0; transform:translateY(60px) scale(0.97) rotate(-0.6deg);}
+    to{opacity:1; transform:translateY(0) scale(1) rotate(0deg);}
+  }
+  @keyframes arrowNudge{
+    0%,100%{transform:translateX(0);}
+    50%{transform:translateX(6px);}
+  }
+  @keyframes barGrow{
+    from{transform:scaleY(0);}
+    to{transform:scaleY(1);}
+  }
+
   .hero-filehead{
     display:flex; justify-content:space-between; align-items:baseline;
     font-family:'IBM Plex Mono', monospace;
@@ -133,7 +190,11 @@
     margin-bottom:34px;
     flex-wrap:wrap;
     gap:8px;
+    opacity:0;
+    animation:fadeUp .6s ease forwards;
   }
+  .hero-parallax{ will-change:transform; }
+
   .hero-eyebrow{
     display:inline-block;
     font-family:'IBM Plex Mono', monospace;
@@ -142,6 +203,9 @@
     color:var(--stamp);
     text-transform:uppercase;
     margin-bottom:18px;
+    opacity:0;
+    animation:fadeUp .6s ease forwards;
+    animation-delay:.14s;
   }
   .hero h1{
     font-size:clamp(2.5rem, 6.4vw, 4.4rem);
@@ -149,6 +213,9 @@
     line-height:1.02;
     color:var(--paper);
     max-width:14ch;
+    opacity:0;
+    animation:fadeUp .85s cubic-bezier(.16,1,.3,1) forwards;
+    animation-delay:.26s;
   }
   .hero-sub{
     margin-top:22px;
@@ -157,12 +224,18 @@
     line-height:1.6;
     color:#cfc6a9;
     font-weight:400;
+    opacity:0;
+    animation:fadeUp .7s ease forwards;
+    animation-delay:.52s;
   }
   .hero-stats{
     margin-top:44px;
     display:grid;
     grid-template-columns:repeat(4, 1fr);
     border-top:1px solid var(--rule-dark);
+    opacity:0;
+    animation:fadeUp .7s ease forwards;
+    animation-delay:.7s;
   }
   .hero-stat{
     padding:16px 14px 0 0;
@@ -172,12 +245,15 @@
   .hero-stat a{
     text-decoration:none;
     display:block;
+    transition:transform .2s ease;
   }
+  .hero-stat a:hover, .hero-stat a:focus-visible{transform:translateY(-3px);}
   .hero-stat-num{
     font-family:'Fraunces', serif;
     font-size:2rem;
     font-weight:600;
     color:var(--paper);
+    font-variant-numeric:tabular-nums;
   }
   .hero-stat-label{
     font-family:'IBM Plex Mono', monospace;
@@ -202,10 +278,12 @@
     border:2.5px solid var(--stamp);
     padding:9px 14px;
     border-radius:3px;
-    transform:rotate(6deg);
-    opacity:0.9;
+    opacity:0;
     mix-blend-mode:screen;
     user-select:none;
+    animation:stampSlam .8s cubic-bezier(.2,.9,.3,1.2) forwards;
+    animation-delay:1s;
+    will-change:transform;
   }
 
   /* ---------- Exhibit sections ---------- */
@@ -214,7 +292,7 @@
   .exhibit{
     position:relative;
     margin-top:64px;
-    scroll-margin-top:64px;
+    scroll-margin-top:80px;
   }
 
   .folder-tab{
@@ -232,11 +310,16 @@
     clip-path:polygon(6% 0, 94% 0, 100% 100%, 0 100%);
     margin-left:28px;
     margin-bottom:-1px;
+    opacity:0;
+    transform:translateY(-160%);
   }
   .folder-tab .tab-dot{
     width:6px; height:6px; border-radius:50%;
     background:var(--stamp);
     display:inline-block;
+  }
+  .exhibit.in-view .folder-tab{
+    animation:tabDrop .55s cubic-bezier(.2,.8,.3,1.1) forwards;
   }
 
   .panel{
@@ -247,6 +330,12 @@
     box-shadow:0 24px 50px -20px rgba(0,0,0,0.55), 0 2px 0 var(--paper-line) inset;
     position:relative;
     overflow:hidden;
+    opacity:0;
+    transform:translateY(60px) scale(0.97) rotate(-0.6deg);
+  }
+  .exhibit.in-view .panel{
+    animation:panelRise .7s cubic-bezier(.16,1,.3,1) forwards;
+    animation-delay:.12s;
   }
 
   .panel::after{
@@ -297,16 +386,24 @@
     border:3px solid var(--stamp);
     padding:8px 12px;
     border-radius:4px;
-    transform:rotate(-5deg);
     white-space:nowrap;
     flex-shrink:0;
     margin-top:4px;
+    opacity:0;
+    transform:scale(2.4) rotate(14deg);
+  }
+  .exhibit.in-view .doc-stamp{
+    animation:
+      docStampSlam .6s cubic-bezier(.2,.9,.3,1.2) forwards,
+      stampGlow 2.4s ease-in-out infinite alternate;
+    animation-delay:.55s, 1.3s;
   }
 
   .entries{
     list-style:none;
     margin:26px 0 0;
     padding:0;
+    counter-reset:entry;
   }
   .entry{
     display:grid;
@@ -315,11 +412,31 @@
     padding:22px 0;
     border-bottom:1px solid var(--paper-line);
     opacity:0;
-    transform:translateY(14px);
-    transition:opacity .55s ease, transform .55s ease;
+    transform:translateY(18px);
+    transition:opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1);
+    position:relative;
   }
+  .entry:nth-child(1){transition-delay:.02s;}
+  .entry:nth-child(2){transition-delay:.09s;}
+  .entry:nth-child(3){transition-delay:.16s;}
+  .entry:nth-child(4){transition-delay:.23s;}
+  .entry:nth-child(5){transition-delay:.30s;}
+  .entry:nth-child(6){transition-delay:.37s;}
   .entry.is-visible{opacity:1; transform:translateY(0);}
   .entry:last-child{border-bottom:none; padding-bottom:6px;}
+
+  .entry::before{
+    content:"";
+    position:absolute;
+    left:-1px; top:22px; bottom:22px;
+    width:2px;
+    background:var(--stamp);
+    transform:scaleY(0);
+    transform-origin:top;
+    transition:transform .5s cubic-bezier(.16,1,.3,1);
+    transition-delay:inherit;
+  }
+  .entry.is-visible::before{transform:scaleY(1);}
 
   .entry-num{
     font-family:'IBM Plex Mono', monospace;
@@ -334,6 +451,7 @@
     font-weight:600;
     line-height:1.3;
     color:var(--ink);
+    transition:color .2s ease;
   }
   .entry-body p{
     margin:8px 0 0;
@@ -342,6 +460,9 @@
     color:var(--ink-soft);
     max-width:64ch;
   }
+  .entry:hover{transform:translateX(3px);}
+  .entry.is-visible:hover{transform:translateX(3px) translateY(0);}
+  .entry:hover .entry-body h3{color:var(--stamp);}
 
   /* ---------- Divider / connective tissue ---------- */
   .field-note{
@@ -354,12 +475,18 @@
     color:var(--muted);
     font-size:0.92rem;
     line-height:1.6;
+    opacity:0;
+    transform:translateX(-16px);
+    transition:opacity .6s ease, transform .6s ease;
   }
+  .field-note.is-visible{opacity:1; transform:translateX(0);}
   .field-note .mark{
     font-family:'IBM Plex Mono', monospace;
     color:var(--stamp);
     font-size:0.8rem;
     margin-top:2px;
+    display:inline-block;
+    animation:arrowNudge 1.8s ease-in-out infinite;
   }
 
   /* ---------- Footer ---------- */
@@ -368,7 +495,11 @@
     margin:88px auto 0;
     padding:32px clamp(20px,5vw,48px) 60px;
     border-top:1px solid var(--rule-dark);
+    opacity:0;
+    transform:translateY(20px);
+    transition:opacity .7s ease, transform .7s ease;
   }
+  footer.is-visible{opacity:1; transform:translateY(0);}
   footer p{
     font-size:0.86rem;
     line-height:1.7;
@@ -398,6 +529,8 @@
 </head>
 <body>
 
+<div class="progress-rail" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
 <nav class="quicknav" aria-label="Exhibit navigation">
   <div class="quicknav-inner">
     <span class="quicknav-brand">Dossier · Case No. 1830</span>
@@ -411,45 +544,47 @@
 </nav>
 
 <header class="hero">
-  <div class="stampmark">RESEARCH<br>COPY</div>
+  <div class="stampmark" id="stampmark">RESEARCH<br>COPY</div>
 
-  <div class="hero-filehead">
-    <span>Filed under: Faith Transition Resources</span>
-    <span>4 Exhibits · 14 Entries</span>
-  </div>
+  <div class="hero-parallax" id="heroParallax">
+    <div class="hero-filehead">
+      <span>Filed under: Faith Transition Resources</span>
+      <span>4 Exhibits · 14 Entries</span>
+    </div>
 
-  <span class="hero-eyebrow">Compiled Objections Dossier</span>
-  <h1>Modern Objections<br>to Mormonism</h1>
-  <p class="hero-sub">
-    A working file of the historical, doctrinal, social, and financial arguments most often
-    raised against the Church of Jesus Christ of Latter-day Saints — organized the way a
-    researcher would file them: by claim, by evidence, by category.
-  </p>
+    <span class="hero-eyebrow">Compiled Objections Dossier</span>
+    <h1>Modern Objections<br>to Mormonism</h1>
+    <p class="hero-sub">
+      A working file of the historical, doctrinal, social, and financial arguments most often
+      raised against the Church of Jesus Christ of Latter-day Saints — organized the way a
+      researcher would file them: by claim, by evidence, by category.
+    </p>
 
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <a href="#exhibit-a" data-nav-stat>
-        <div class="hero-stat-num">06</div>
-        <div class="hero-stat-label">Exhibit A<br>Historical Truth Claims</div>
-      </a>
-    </div>
-    <div class="hero-stat">
-      <a href="#exhibit-b" data-nav-stat>
-        <div class="hero-stat-num">03</div>
-        <div class="hero-stat-label">Exhibit B<br>Institutional Doctrine</div>
-      </a>
-    </div>
-    <div class="hero-stat">
-      <a href="#exhibit-c" data-nav-stat>
-        <div class="hero-stat-num">03</div>
-        <div class="hero-stat-label">Exhibit C<br>Psychological Impact</div>
-      </a>
-    </div>
-    <div class="hero-stat">
-      <a href="#exhibit-d" data-nav-stat>
-        <div class="hero-stat-num">02</div>
-        <div class="hero-stat-label">Exhibit D<br>Financial Transparency</div>
-      </a>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <a href="#exhibit-a" data-nav-stat>
+          <div class="hero-stat-num" data-count="6">00</div>
+          <div class="hero-stat-label">Exhibit A<br>Historical Truth Claims</div>
+        </a>
+      </div>
+      <div class="hero-stat">
+        <a href="#exhibit-b" data-nav-stat>
+          <div class="hero-stat-num" data-count="3">00</div>
+          <div class="hero-stat-label">Exhibit B<br>Institutional Doctrine</div>
+        </a>
+      </div>
+      <div class="hero-stat">
+        <a href="#exhibit-c" data-nav-stat>
+          <div class="hero-stat-num" data-count="3">00</div>
+          <div class="hero-stat-label">Exhibit C<br>Psychological Impact</div>
+        </a>
+      </div>
+      <div class="hero-stat">
+        <a href="#exhibit-d" data-nav-stat>
+          <div class="hero-stat-num" data-count="2">00</div>
+          <div class="hero-stat-label">Exhibit D<br>Financial Transparency</div>
+        </a>
+      </div>
     </div>
   </div>
 </header>
@@ -665,7 +800,7 @@
 
 </main>
 
-<footer>
+<footer id="footer">
   <p>This dossier collects objections as they are commonly raised by historians, former members,
     and researchers — it is a summary of arguments, not a verdict on them. Each entry compresses a
     larger body of source material, correspondence, and church-published essays worth reading in
@@ -674,10 +809,72 @@
 </footer>
 
 <script>
-  // Reveal entries on scroll
-  const entries = document.querySelectorAll('.entry');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---------- Scroll progress bar ---------- */
+  const progressFill = document.getElementById('progressFill');
+  function updateProgress(){
+    const el = document.documentElement;
+    const scrolled = el.scrollTop;
+    const max = el.scrollHeight - el.clientHeight;
+    const pct = max > 0 ? Math.min(1, scrolled / max) : 0;
+    progressFill.style.transform = `scaleX(${pct})`;
+  }
+  let progTicking = false;
+  window.addEventListener('scroll', () => {
+    if(!progTicking){
+      requestAnimationFrame(() => { updateProgress(); progTicking = false; });
+      progTicking = true;
+    }
+  }, { passive:true });
+  updateProgress();
+
+  /* ---------- Hero parallax (kicks in after entrance sequence) ---------- */
+  const heroParallax = document.getElementById('heroParallax');
+  const stampEl = document.getElementById('stampmark');
+  let heroAnimDone = reduceMotion;
+  setTimeout(() => { heroAnimDone = true; }, 1900);
+
+  function updateParallax(){
+    if (reduceMotion || !heroAnimDone) return;
+    const y = window.scrollY;
+    const fade = Math.max(0, 1 - y / 420);
+    if (heroParallax){
+      heroParallax.style.transform = `translateY(${y * 0.22}px)`;
+      heroParallax.style.opacity = fade;
+    }
+    if (stampEl){
+      stampEl.style.transform = `translateY(${y * 0.35}px) rotate(6deg)`;
+      stampEl.style.opacity = Math.min(0.9, fade + 0.1);
+    }
+  }
+  let paraTicking = false;
+  window.addEventListener('scroll', () => {
+    if(!paraTicking){
+      requestAnimationFrame(() => { updateParallax(); paraTicking = false; });
+      paraTicking = true;
+    }
+  }, { passive:true });
+
+  /* ---------- Counters ---------- */
+  function animateCount(el){
+    const target = parseInt(el.dataset.count, 10) || 0;
+    if (reduceMotion){ el.textContent = String(target).padStart(2,'0'); return; }
+    const dur = 900;
+    const start = performance.now();
+    function tick(now){
+      const p = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = String(Math.round(eased * target)).padStart(2, '0');
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const counters = document.querySelectorAll('.hero-stat-num');
+  setTimeout(() => counters.forEach(animateCount), reduceMotion ? 0 : 1250);
+
+  /* ---------- Entry reveal ---------- */
+  const entries = document.querySelectorAll('.entry');
   if (reduceMotion) {
     entries.forEach(el => el.classList.add('is-visible'));
   } else if ('IntersectionObserver' in window) {
@@ -694,7 +891,43 @@
     entries.forEach(el => el.classList.add('is-visible'));
   }
 
-  // Active nav highlight
+  /* ---------- Exhibit panel / tab / stamp reveal ---------- */
+  const exhibits = document.querySelectorAll('.exhibit');
+  if (reduceMotion) {
+    exhibits.forEach(el => el.classList.add('in-view'));
+  } else if ('IntersectionObserver' in window) {
+    const exIO = new IntersectionObserver((items) => {
+      items.forEach(item => {
+        if (item.isIntersecting) {
+          item.target.classList.add('in-view');
+          exIO.unobserve(item.target);
+        }
+      });
+    }, { threshold: 0.18, rootMargin: '0px 0px -60px 0px' });
+    exhibits.forEach(el => exIO.observe(el));
+  } else {
+    exhibits.forEach(el => el.classList.add('in-view'));
+  }
+
+  /* ---------- Field notes + footer reveal ---------- */
+  const fadeTargets = document.querySelectorAll('.field-note, #footer');
+  if (reduceMotion) {
+    fadeTargets.forEach(el => el.classList.add('is-visible'));
+  } else if ('IntersectionObserver' in window) {
+    const fIO = new IntersectionObserver((items) => {
+      items.forEach(item => {
+        if (item.isIntersecting) {
+          item.target.classList.add('is-visible');
+          fIO.unobserve(item.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    fadeTargets.forEach(el => fIO.observe(el));
+  } else {
+    fadeTargets.forEach(el => el.classList.add('is-visible'));
+  }
+
+  /* ---------- Active nav highlight ---------- */
   const navLinks = document.querySelectorAll('.quicknav-links a[data-nav]');
   const sections = document.querySelectorAll('.exhibit');
   if ('IntersectionObserver' in window && sections.length) {
